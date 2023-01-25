@@ -1,48 +1,61 @@
 from django.shortcuts import render
 
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import login
+# from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
 
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
+
+# from .serializers import UserSerializer
+# from django.contrib.auth import get_user_model
+
+from .models import User
 
 class RegisterView(View):
 
     def get(self, request):
-        return render(request, 'users/register.html')
+        return render(request, 'register.html')
 
+    @csrf_exempt
     def post(self, request):
         email = request.POST.get('email')
-        password = request.POST.get('password')
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        if password == password2:
+        print(email, password1, password2)
+
+        if password1 == password2:
             if User.objects.filter(email=email).exists():
-                messages.info(request, 'Email already exists')
-                return redirect('register')
+                return render(request, 'register.html', {'error_message': 'Email already exists'})
+            elif User.objects.filter(username=username).exists():
+                return render(request, 'register.html', {'error_message': 'Username already exists'})
             else:
-                user = User.objects.create_user(email=email, password=password)
+                user = User.objects.create_user(email=email, username=username, password=password1)
                 user.save()
-                print('user created')
-                return redirect('login')
+                return redirect('/login/')
         else:
-            messages
+            return render(request, 'register.html', {'error_message': 'Passwords do not match'})
 
 
 class LoginView(View):
     def get(self, request):
-        return render(request, 'users/login.html')
+        return render(request, 'login.html')
 
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, email=email, password=password)
+        user = User.objects.filter(email=email).first()
 
-        if user is not None:
+        if user is None:
+            return render(request, 'login.html', {'error_message': 'Invalid credentials'})
+
+        if user.check_password(password):
             login(request, user)
-            return redirect('home')
+            return redirect('/home/')
         else:
-            messages
+            return render(request, 'login.html', {'error_message': 'Invalid credentials'})

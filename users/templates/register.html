@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+  {% block content %}
+
+  <div>
+        <p class="header">Register</p>
+        <p class="subheader">Enter your credentials</p>
+    </div>
+
+    <div id="card", style="height:450px">
+        <div id="card-content">
+        <div id="card-title">
+        </div>
+
+    <form method="post" class="form">
+        {%csrf_token%}
+
+        {%if error_message%}
+            <label id="error-message">
+                {{error_message|safe}}
+            </label>
+        {%endif%}
+
+        <label for="user-email" style="padding-top:13px">
+            &nbsp;Email
+        </label>
+        <input id="user-email" class="form-content" type="email" name="email" autocomplete="on" required />
+        <div class="form-border"></div>
+
+        <label for="username" style="padding-top:13px">
+            &nbsp;Username
+        </label>
+        <input id="username" class="form-content" type="text" name="username" autocomplete="on" required />
+        <div class="form-border"></div>
+
+        <label for="user-password" style="padding-top:22px">
+            &nbsp;Password
+        </label>
+        <input id="user-password" class="form-content" type="password" name="password1" required />
+        <div class="form-border"></div>
+
+        <label for="user-password" style="padding-top:22px">
+            &nbsp;Confirm password
+        </label>
+        <input id="user-password" class="form-content" type="password" name="password2" required />
+
+        <div class="form-border"></div> 
+        <input id="submit-btn" type="submit" name="submit" value="Register" />
+    </form>
+    </div>
+    </div>
+    ...
+
+  {% endblock %}
