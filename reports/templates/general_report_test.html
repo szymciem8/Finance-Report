@@ -1,0 +1,59 @@
+{% extends 'topbar.html' %}
+
+  {% block content %}
+
+<head>
+	<!-- Load plotly.js into the DOM -->
+    <canvas id="line-chart"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <style>
+        #line-chart {
+            display: block;
+            width: 100%;
+          }
+    </style>
+</head>
+
+<body>
+	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV -->
+        <script>
+            var yahoo_data = {
+                x: {{ date|safe }},
+                y: {{ open_price|safe }}
+            };
+            var stock = '{{ stock|safe }}';
+
+            var yahoo_data_points = []
+            for (var i = 0; i < yahoo_data.x.length; i++) {
+                var date = yahoo_data.x[i];
+                var price = yahoo_data.y[i];
+                yahoo_data_points.push({x: date, y: price});
+            }
+
+            var s_yahoo = {
+                label:  stock,
+                borderColor: 'blue',
+                data: yahoo_data_points
+            };
+            
+            var ctx = document.getElementById('line-chart').getContext('2d');
+                var chart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: [s_yahoo] },
+                options: {
+                    scales: {
+                    xAxes: [{
+                        type: 'time'
+                    }]
+                    }
+                }
+            });
+
+        </script>
+    
+    </div>
+</body>
+
+{% endblock %}

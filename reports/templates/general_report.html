@@ -1,0 +1,42 @@
+<html>
+    <head>
+      <title>Matplotlib</title>
+      <meta charset="utf-8">
+      <link rel="icon" type="image/x-icon" href="./favicon.png">
+      <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+      <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+      <link rel="stylesheet" href="./assets/css/examples.css" />
+      <link rel="stylesheet" href="./assets/prism/prism.css" />
+      <script defer src="./assets/prism/prism.js"></script>
+    </head>
+    <body>
+      <section class="pyscript">
+        <div id="mpl"></div>
+  
+        <py-config>
+          packages = [
+            "matplotlib"
+          ]
+        </py-config>
+  
+        <py-script>
+            import matplotlib.pyplot as plt
+            import numpy as np
+            
+            # Load data from django context
+            data = '{{ context }}'
+
+            y = np.random.rand(100)
+            x = np.arange(len(y))  
+            print(data)  
+
+            fig = plt.figure(figsize=(10,5))
+            ax = fig.add_subplot()
+            ax.plot(x, y, linestyle='--', color='r', linewidth=2)
+            
+            display(fig, target="mpl")
+        </py-script>
+      </section>
+    </body>
+</html>
+  
