@@ -3,56 +3,238 @@
   {% block content %}
 
 <head>
-	<!-- Load plotly.js into the DOM -->
-    <canvas id="line-chart"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <style>
+        body {
+            background: linear-gradient(8deg, #036938 50%, #2e9463 50%);
+            text-align: center;
+            height: 100%;
+            margin: 0;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .header {
+            color: white;
+            font-size: 50px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .subheader {
+            color: white;
+            font-size: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        label {
+            font-family: "Raleway", sans-serif;
+            font-size: 11pt;
+        }
+
+        #forgot-pass {
+            color: #2dbd6e;
+            font-family: "Raleway", sans-serif;
+            font-size: 10pt;
+            margin-top: 3px;
+            text-align: right;
+        }
+
+        .card {
+            align-self: center;
+            background: #fbfbfb;
+            border-radius: 8px;
+            box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
+            height: 50%;
+            margin: 40px auto;
+            padding: 44px 44px;
+            width: 80%;
+        }
+
+        .card-content {
+            padding-top: 10px;
+            text-align: justify;
+        }
+
+        .card-title {
+            font-family: "Raleway Thin", sans-serif;
+            font-size: larger;
+            font-weight: bold;
+            /* letter-spacing: 4px; */
+            padding-bottom: 10px;
+            /* padding-top: 10px; */
+            text-align: center;
+        }
+
+        #submit-btn {
+            background: #036938;
+            border: none;
+            border-radius: 21px;
+            cursor: pointer;
+            color: white;
+            font-family: "Raleway SemiBold", sans-serif;
+            height: 42.3px;
+            margin: 0 auto;
+            margin-top: 50px;
+            transition: 0.25s;
+            width: 153px;
+        }
+
+        #error-message{
+            color: #ff0000;
+            font-family: "Raleway", sans-serif;
+            font-size: 10pt;
+            margin-top: 3px;
+            text-align: center;
+        }
+
+        #submit-btn:hover {
+            box-shadow: 0px 1px 18px #036938
+        }
+
+        .form {
+            align-items: left;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-border {
+            background: #036938;
+            height: 1px;
+            width: 100%;
+        }
+
+        .form-content {
+            background: #fbfbfb;
+            border: none;
+            outline: none;
+            padding-top: 14px;
+        }
+
+        .underline-title {
+            background: #036938;
+            height: 2px;
+            margin: -1.1rem auto 0 auto;
+            width: 89px;
+        }
+
         #line-chart {
             display: block;
             width: 100%;
-          }
+        }
+
+        #stock-price {
+            font-size: x-large;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        th {
+            width: 10%;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 1em 1em;
+        }
     </style>
 </head>
 
 <body>
-	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV -->
-        <script>
-            var yahoo_data = {
-                x: {{ date|safe }},
-                y: {{ open_price|safe }}
-            };
-            var stock = '{{ stock|safe }}';
+    <div class="card">
+        <div class="card-title">
+            Current Stock Price
+        </div>
+        <div class="card-content" id="stock-price">
+            {{ current_price|safe }} USD
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">
+            Stock Chart
+        </div>
+        <div class="card-content">
+            <canvas id="line-chart"></canvas>
+            <script>
+                var yahoo_data = {
+                    x: {{ date|safe }},
+                    y: {{ open_price|safe }}
+                };
+                var stock = '{{ stock|safe }}';
 
-            var yahoo_data_points = []
-            for (var i = 0; i < yahoo_data.x.length; i++) {
-                var date = yahoo_data.x[i];
-                var price = yahoo_data.y[i];
-                yahoo_data_points.push({x: date, y: price});
-            }
-
-            var s_yahoo = {
-                label:  stock,
-                borderColor: 'blue',
-                data: yahoo_data_points
-            };
-            
-            var ctx = document.getElementById('line-chart').getContext('2d');
-                var chart = new Chart(ctx, {
-                type: 'line',
-                data: { datasets: [s_yahoo] },
-                options: {
-                    scales: {
-                    xAxes: [{
-                        type: 'time'
-                    }]
-                    }
+                var yahoo_data_points = []
+                for (var i = 0; i < yahoo_data.x.length; i++) {
+                    var date = yahoo_data.x[i];
+                    var price = yahoo_data.y[i];
+                    yahoo_data_points.push({x: date, y: price});
                 }
-            });
 
-        </script>
-    
+                var dif = yahoo_data.y.at(-1) - yahoo_data.y.at(0);
+                var s_yahoo = {
+                    label:  stock,
+                    backgroundColor: dif >= 0 ? '#00FF002F' : '#FF00002F',
+                    borderColor: dif >= 0 ? 'green' : 'red',
+                    data: yahoo_data_points,
+                    tension: 0
+                };
+                                
+                var ctx = document.getElementById('line-chart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets: [s_yahoo] },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time'
+                            }]
+                        }
+                    }
+                });
+
+            </script>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">
+            About
+        </div>
+        <div class="card-content">
+            <table>
+                <!-- 
+                <tr>
+                    <th>Short name</th>
+                    <td>{{ short_name|safe }}</td>
+                </tr>
+                 -->
+                <tr>
+                    <th>Name</th>
+                    <td>{{ long_name|safe }}</td>
+                </tr>
+                <tr>
+                    <th>Sector</th>
+                    <td>{{ sector|safe }}</td>
+                </tr>
+                <tr>
+                    <th>Website</th>
+                    <td>
+                        {% if website == "N/A" %}
+                        {{ website|safe }}
+                        {% else %}
+                        <a href="{{ website|safe }}">{{ website|safe }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Summary</th>
+                    <td>{{ long_summary|safe }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </body>
 
