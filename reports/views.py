@@ -11,7 +11,9 @@ from django.contrib.auth.decorators import login_required
 class FinanceReportView(View):
 
     # @login_required
-    def get(self, request, stock='AAPL'):
+    def get(self, request, stock='TSLA'):
+
+        stock = request.GET.get('stock', 'TSLA')
 
         today = datetime.date.today().strftime('%Y-%m-%d')
         two_weeks_ago = (datetime.date.today() - datetime.timedelta(days=14)).strftime('%Y-%m-%d')

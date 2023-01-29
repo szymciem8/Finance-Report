@@ -26,8 +26,6 @@ class RegisterView(View):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        print(email, password1, password2)
-
         if password1 == password2:
             if User.objects.filter(email=email).exists():
                 return render(request, 'register.html', {'error_message': 'Email already exists'})
@@ -36,7 +34,7 @@ class RegisterView(View):
             else:
                 user = User.objects.create_user(email=email, username=username, password=password1)
                 user.save()
-                return redirect('/login/')
+                return redirect('/users/login/')
         else:
             return render(request, 'register.html', {'error_message': 'Passwords do not match'})
 
