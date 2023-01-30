@@ -1,16 +1,10 @@
 from django.shortcuts import render
-
-from django.contrib.auth import login
-# from django.contrib.auth.models import User
-from django.contrib import messages
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views import View
 
 from django.views.decorators.csrf import csrf_exempt
-# Create your views here.
 
-# from .serializers import UserSerializer
-# from django.contrib.auth import get_user_model
 
 from .models import User
 
@@ -36,7 +30,7 @@ class RegisterView(View):
             else:
                 user = User.objects.create_user(email=email, username=username, password=password1)
                 user.save()
-                return redirect('/login/')
+                return redirect('/users/login/')
         else:
             return render(request, 'register.html', {'error_message': 'Passwords do not match'})
 
@@ -59,3 +53,10 @@ class LoginView(View):
             return redirect('/home/')
         else:
             return render(request, 'login.html', {'error_message': 'Invalid credentials'})
+
+
+class LogoutView(View):
+
+    def get(self, request):
+        logout(request)
+        return redirect('/users/login/')
