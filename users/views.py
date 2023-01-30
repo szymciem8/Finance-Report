@@ -50,7 +50,7 @@ class LoginView(View):
 
         if user.check_password(password):
             login(request, user)
-            return redirect('/home/')
+            return redirect('/')
         else:
             return render(request, 'login.html', {'error_message': 'Invalid credentials'})
 
