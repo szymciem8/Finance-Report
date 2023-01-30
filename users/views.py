@@ -1,16 +1,10 @@
 from django.shortcuts import render
-
-from django.contrib.auth import login
-# from django.contrib.auth.models import User
-from django.contrib import messages
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views import View
 
 from django.views.decorators.csrf import csrf_exempt
-# Create your views here.
 
-# from .serializers import UserSerializer
-# from django.contrib.auth import get_user_model
 
 from .models import User
 
@@ -54,6 +48,13 @@ class LoginView(View):
 
         if user.check_password(password):
             login(request, user)
-            return redirect('/home/')
+            return redirect('/')
         else:
             return render(request, 'login.html', {'error_message': 'Invalid credentials'})
+
+
+class LogoutView(View):
+
+    def get(self, request):
+        logout(request)
+        return redirect('/users/login/')

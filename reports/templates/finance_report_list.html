@@ -146,96 +146,28 @@
 </head>
 
 <body>
-    <div class="card">
-        <div class="card-title">
-            Current Stock Price
-        </div>
-        <div class="card-content" id="stock-price">
-            {{ current_price|safe }} USD
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-title">
-            Stock Chart
-        </div>
-        <div class="card-content">
-            <canvas id="line-chart"></canvas>
-            <script>
-                var yahoo_data = {
-                    x: {{ date|safe }},
-                    y: {{ open_price|safe }}
-                };
-                var stock = '{{ stock|safe }}';
 
-                var yahoo_data_points = []
-                for (var i = 0; i < yahoo_data.x.length; i++) {
-                    var date = yahoo_data.x[i];
-                    var price = yahoo_data.y[i];
-                    yahoo_data_points.push({x: date, y: price});
-                }
-
-                var dif = yahoo_data.y.at(-1) - yahoo_data.y.at(0);
-                var s_yahoo = {
-                    label:  stock,
-                    backgroundColor: dif >= 0 ? '#00FF002F' : '#FF00002F',
-                    borderColor: dif >= 0 ? 'green' : 'red',
-                    data: yahoo_data_points,
-                    tension: 0
-                };
-                                
-                var ctx = document.getElementById('line-chart').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'line',
-                    data: { datasets: [s_yahoo] },
-                    options: {
-                        scales: {
-                            xAxes: [{
-                                type: 'time'
-                            }]
-                        }
-                    }
-                });
-
-            </script>
-        </div>
+    <div class="header">
+        <h2> {{ username }}'s Stock Reports </h2>
     </div>
-    <div class="card">
-        <div class="card-title">
-            About
+
+    {% for report in reports %}
+        <div class="card" href="https://google.com">
+            <a href="/reports/finance-report/{{ report.id }}/"/>
+
+            <div class="card-title" >
+                {{ report.name}}
+            </div>
+            <div class="card-content" id="stock-price">
+                {{ report.stock|safe }}, Period {{ report.period }}
+            </div>
+
+            <div class="card-content" id="stock-price">
+                Created at {{ report.creation_date }}
+            </div>
         </div>
-        <div class="card-content">
-            <table>
-                <!-- 
-                <tr>
-                    <th>Short name</th>
-                    <td>{{ short_name|safe }}</td>
-                </tr>
-                 -->
-                <tr>
-                    <th>Name</th>
-                    <td>{{ long_name|safe }}</td>
-                </tr>
-                <tr>
-                    <th>Sector</th>
-                    <td>{{ sector|safe }}</td>
-                </tr>
-                <tr>
-                    <th>Website</th>
-                    <td>
-                        {% if website == "N/A" %}
-                        {{ website|safe }}
-                        {% else %}
-                        <a href="{{ website|safe }}">{{ website|safe }}</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Summary</th>
-                    <td>{{ long_summary|safe }}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    {% endfor %}
+    
 </body>
 
 {% endblock %}

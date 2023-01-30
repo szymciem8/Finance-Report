@@ -1,4 +1,5 @@
-{% extends 'topbar.html' %}
+{% include 'topbar.html' %}
+{% include 'base.html' %}
 
   {% block content %}
 
@@ -146,6 +147,48 @@
 </head>
 
 <body>
+    <div class="card">
+        <form method="post" class="form">
+            {%csrf_token%}
+
+            {%if error_message%}
+                <label id="error-message">
+                    {{error_message|safe}}
+                </label>
+            {%endif%}
+
+            <label for="report-ticker" style="padding-top:13px">
+                &nbsp;Ticker
+            </label>
+            <input style="width:300px; align-self:center" id="report-ticker" class="form-content" name="stock" autocomplete="on" required />
+            <div style="width:300px; align-self:center" class="form-border"></div>
+            
+            <label for="user-password" style="padding-top:22px">
+                &nbsp;Period
+            </label>
+            
+            <input style="width:300px; align-self:center" list="browsers" name="period">
+                <datalist id="browsers">
+                    <option value="1d">
+                    <option value="5d">
+                    <option value="1mo">
+                    <option value="3mo">
+                    <option value="6mo">
+                    <option value="1y">
+                    <option value="2y">
+                    <option value="5y">
+                    <option value="10y">
+                    <option value="ytd">
+                    <option value="max">
+                </datalist>
+            
+            </input>
+
+            <div style="width:300px; align-self:center" class="form-border"></div> 
+            <input id="submit-btn" type="submit" name="submit" value="Update" />
+        </form>
+    </div>
+
     <div class="card">
         <div class="card-title">
             Current Stock Price

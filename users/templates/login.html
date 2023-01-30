@@ -1,39 +1,46 @@
 {% extends 'base.html' %}
 
-  {% block content %}
+{% block content %}
 
-  <div>
-        <p class="header">Login</p>
-        <p class="subheader">Enter your credentials</p>
-    </div>
-    <div id="card">
-        <div id="card-content">
+<div>
+    <p class="header">Login</p>
+    <p class="subheader">Enter your credentials</p>
+</div>
+<div id="card">
+    <div id="card-content">
         <div id="card-title">
         </div>
 
-    <form method="post" class="form">
-        {%csrf_token%}
+        <form method="post" class="form">
+            {%csrf_token%}
 
-        {%if error_message%}
-            <label id="error-message">
-                {{error_message|safe}}
+            {%if error_message%}
+                <label id="error-message">
+                    {{error_message|safe}}
+                </label>
+            {%endif%}
+
+            <label for="user-email" style="padding-top:13px">
+                &nbsp;Email
             </label>
-        {%endif%}
-
-        <label for="user-email" style="padding-top:13px">
-            &nbsp;Email
-        </label>
-        <input id="user-email" class="form-content" type="emial" name="email" autocomplete="on" required />
-        <div class="form-border"></div>
-        
-        <label for="user-password" style="padding-top:22px">
-            &nbsp;Password
-        </label>
-        <input id="user-password" class="form-content" type="password" name="password" required />
-        <div class="form-border"></div> 
-        <input id="submit-btn" type="submit" name="submit" value="Login" />
-    </form>
-    </div>
+            <input id="user-email" class="form-content" type="emial" name="email" autocomplete="on" required />
+            <div class="form-border"></div>
+            
+            <label for="user-password" style="padding-top:22px">
+                &nbsp;Password
+            </label>
+            <input id="user-password" class="form-content" type="password" name="password" required />
+            <div class="form-border"></div> 
+            <input id="submit-btn" type="submit" name="submit" value="Login" />
+        </form>
     </div>
 
-  {% endblock %}
+    <div id="card-footer">
+        <div id="card-footer-text">
+            <p>Don't have an account? <a href="/users/register/">Register</a></p>
+        </div>
+    </div>    
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% include 'base.html' %}
+{% include 'topbar.html' %}
+
+{% block content %}
+
+<div>
+    <p class="header">Add Report</p>
+    <p class="subheader">Enter ticker</p>
+</div>
+<div id="card">
+    <div id="card-content">
+        <div id="card-title">
+        </div>
+
+        <form method="post" class="form">
+            {%csrf_token%}
+
+            {%if error_message%}
+                <label id="error-message">
+                    {{error_message|safe}}
+                </label>
+            {%endif%}
+
+            <label for="user-report" style="padding-top:13px">
+                &nbsp;Report Name
+            </label>
+            <input id="user-report" class="form-content" name="report-name" autocomplete="on" required />
+            <div class="form-border"></div>
+
+
+            <label for="report-ticker" style="padding-top:13px">
+                &nbsp;Ticker
+            </label>
+            <input id="report-ticker" class="form-content" name="stock" autocomplete="on" required />
+            <div class="form-border"></div>
+            
+            <label for="user-password" style="padding-top:22px">
+                &nbsp;Period
+            </label>
+            {% comment %} <input id="user-password" class="form-content" type="password" name="password" required /> {% endcomment %}
+            
+            <input list="browsers" name="period">
+                <datalist id="browsers">
+                    <option value="1d">
+                    <option value="5d">
+                    <option value="1mo">
+                    <option value="3mo">
+                    <option value="6mo">
+                    <option value="1y">
+                    <option value="2y">
+                    <option value="5y">
+                    <option value="10y">
+                    <option value="ytd">
+                    <option value="max">
+                </datalist>
+            
+            </input>
+
+            <div class="form-border"></div> 
+            <input id="submit-btn" type="submit" name="submit" value="Add" />
+        </form>
+    </div>
+</div>
+
+{% endblock %}

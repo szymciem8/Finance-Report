@@ -2,12 +2,12 @@
 
   {% block content %}
 
-  <div>
+    <div>
         <p class="header">Register</p>
         <p class="subheader">Enter your credentials</p>
     </div>
 
-    <div id="card", style="height:450px">
+    <div id="card", style="height:480px">
         <div id="card-content">
         <div id="card-title">
         </div>
@@ -47,8 +47,14 @@
         <div class="form-border"></div> 
         <input id="submit-btn" type="submit" name="submit" value="Register" />
     </form>
+
+    <div id="card-footer">
+        <div id="card-footer-text">
+            <p>Do you have an account? <a href="/users/login/">Login</a></p>
+        </div>
+    </div>    
+
     </div>
-    </div>
-    ...
+</div>
 
   {% endblock %}

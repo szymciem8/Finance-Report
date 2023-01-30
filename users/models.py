@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from reports.models import FinanceReport
+
 from .managers import UserManager
 
 

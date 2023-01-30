@@ -1,9 +1,51 @@
-{% extends 'topbar.html' %}
+{% include 'topbar.html' %}
+{% include 'base.html' %}
 
   {% block content %}
 
-  <div>
-    Test
-  </div>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
-  {% endblock %}
+    <style>
+
+        .card {
+            align-self: center;
+            background: #fbfbfb;
+            border-radius: 8px;
+            box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
+            height: 50%;
+            margin: 40px auto;
+            padding: 44px 44px;
+            width: 80%;
+        }
+
+        .card-content {
+            padding-top: 10px;
+            text-align: justify;
+        }
+
+        .card-title {
+            font-family: "Raleway Thin", sans-serif;
+            font-size: larger;
+            font-weight: bold;
+            /* letter-spacing: 4px; */
+            padding-bottom: 10px;
+            /* padding-top: 10px; */
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" style="width:500px">
+        <div class="card-title">
+            Finance Reports
+        </div>
+        <div class="card-content" style="font-weight:normal">
+            The web app is designed for stock market enthusiasts and financial analysts. It utilizes the Yahoo Finance API to gather real-time data on stocks and generate comprehensive finance reports. The reports provide insights into stock performance, financial metrics, and investment trends. Users can easily track their portfolio and monitor market trends with interactive charts and customizable dashboard. The app's user-friendly interface and accurate data analysis make it an ideal tool for making informed investment decisions.
+        </div>
+    </div>
+</body>
+
+{% endblock %}
