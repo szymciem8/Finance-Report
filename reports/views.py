@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 import yfinance as yf
 
@@ -12,16 +13,15 @@ VALID_PERIODS = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd'
 
 class AddFinanceReporView(LoginRequiredMixin, View):
 
-
     def get(self, request):
         return render(request, 'add_finance_report.html')
 
+    @csrf_exempt
     def post(self, request):
         report_name = request.POST.get('report-name')
         stock = request.POST.get('stock').upper()
         period = request.POST.get('period')
 
-        print(report_name, stock, period)
 
         # Checing if stock exists
         if not yf.Ticker(stock).info:
@@ -83,6 +83,7 @@ class QuickReportView(View):
 
         return render(request, 'quick_finance_report.html', context=context)
 
+    @csrf_exempt
     def post(self, request):
         stock = request.POST.get('stock').upper()
         period = request.POST.get('period').lower()
