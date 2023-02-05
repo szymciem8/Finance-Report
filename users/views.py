@@ -37,6 +37,7 @@ class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
 
+    @csrf_exempt
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
