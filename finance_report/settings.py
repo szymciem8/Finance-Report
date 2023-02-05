@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-9n%lro+gqa@m-7)i*92!$m_ls!06yw_tkwo+4o6(39tl$fty01
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://finance-reports.azurewebsites.net','https://*.127.0.0.1']
 
 
 # Application definition
