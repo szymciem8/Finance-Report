@@ -22,10 +22,12 @@ class AddFinanceReporView(LoginRequiredMixin, View):
         stock = request.POST.get('stock').upper()
         period = request.POST.get('period')
 
-
         # Checing if stock exists
         if not yf.Ticker(stock).info:
             return render(request, 'add_finance_report.html', {'error_message': 'Stock does not exist'})
+
+        if period not in VALID_PERIODS:
+            return render(request, 'add_finance_report.html', {'error_message': 'Invalid period'})
 
         report = FinanceReport.objects.create(user=request.user, name=report_name, stock=stock, period=period)
 
@@ -60,7 +62,6 @@ class FinanceReportListView(LoginRequiredMixin, View):
     def get(self, request):
         reports = FinanceReport.objects.filter(user=request.user).order_by('-creation_date')
         reports = reports.values()
-        print(reports)
         username = request.user.username
 
         context = {

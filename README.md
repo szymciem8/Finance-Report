@@ -60,3 +60,7 @@ This app is licensed under an open source license (MIT) so everyone is welcome t
 - Linux or other unix-based operating systems
 `python3 manage.py runserver`
 7. Access the application using a web browser at http://127.0.0.1:8000/ by default
+
+## Azure Deployment for Polsl students 
+
+
