@@ -1,3 +1,6 @@
 django
 yfinance
 pandas
+mysqlclient
+celery
+redis
