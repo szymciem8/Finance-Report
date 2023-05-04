@@ -2,11 +2,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 import yfinance as yf
 
 from .models import FinanceReport
 from .utils import generate_finance_report
+from .tasks import generate_report
 
 
 VALID_PERIODS = ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max']
@@ -105,3 +108,13 @@ class FinanceReportView(View):
         context = generate_finance_report(stock, period)
 
         return render(request, 'general_report_test.html', context=context)
+    
+
+class FinanceReportPDFView(APIView):
+    
+    def get(self, request):
+
+        stock = request.GET.get('stock').upper()
+
+        generate_report.delay(stock)
+        return Response({'message':'Starting report generation process'})

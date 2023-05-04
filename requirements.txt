@@ -1,6 +1,10 @@
 django
+djangorestframework
+matplotlib
 yfinance
 pandas
 mysqlclient
 celery
 redis
+FPDF
+reportlab

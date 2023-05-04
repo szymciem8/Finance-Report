@@ -7,4 +7,6 @@ urlpatterns = [
     path('finance-report/<int:report_id>/', views.FinanceRerportDetailView.as_view(), name='finance_report_detail'),
     path('finance-report-list/', views.FinanceReportListView.as_view(), name='finance_report_list'),
     path('quick-report/', views.QuickReportView.as_view(), name='quick_report'),
+
+    path('generate-pdf-report/', views.FinanceReportPDFView.as_view(), name='generate_pdf_report'),
 ]
