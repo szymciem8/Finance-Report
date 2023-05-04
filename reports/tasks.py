@@ -6,7 +6,7 @@ from time import sleep
 from .report_templates.stock_report import FinanceReportPDF
 
 
-@shared_task
+@shared_task # ((autoretry_for=(Exception,), retry_kwargs={'max_retries': 5}))
 def generate_report(stock):
     now = datetime.now().strftime('%Y-%m-%d')
     path = f'documents/{stock}-{now}.pdf'

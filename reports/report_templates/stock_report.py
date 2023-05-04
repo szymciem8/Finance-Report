@@ -1,5 +1,4 @@
 import yfinance as yf
-import pandas as pd
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -13,9 +12,6 @@ from reportlab.graphics.charts.piecharts import Pie
 
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.colors import Color
-
-from datetime import datetime
-# from reports.utils import VALID_PERIODS
 
 
 def money_converter(amount):
@@ -103,31 +99,41 @@ class FinanceReportPDF:
         self.elements.append(PageBreak())
 
     def history_page(self):
+        style = [('VALIGN',(0,0),(-1,-1),'CENTER'), ('ALIGN', (0, 0), (-1, -1), 'CENTER'),]
         self.elements.append(Paragraph(f"<h2>Stock history</h2>", self.styles["Heading2"]))
 
-        self.elements.append(Paragraph(f"<h3>1 Month </h3>", self.styles["Heading3"]))
-        self.elements.append(Spacer(1, 0.1*inch))
-        drawing = self.create_history_chart(period='1mo')
-        self.elements.extend([drawing])
+        self.create_titles(('1 Month', '3 Months'))
 
-        self.elements.append(Paragraph(f"<h3>3 Months</h3>", self.styles["Heading3"]))
-        self.elements.append(Spacer(1, 0.1*inch))
-        drawing = self.create_history_chart(period='3mo')
-        self.elements.extend([drawing])
+        d1 = self.create_history_chart(period='1mo', width=200, x_drawing=200)
+        d2 = self.create_history_chart(period='3mo', width=180, x_drawing=180)
+        
+        data = [(d1, d2)]
+        t = Table(data)
+        t.setStyle(TableStyle(style))
+        self.elements.append(t)
 
-        self.elements.append(Paragraph(f"<h3>6 Months</h3>", self.styles["Heading3"]))
         self.elements.append(Spacer(1, 0.1*inch))
+        self.create_titles(('6 Months'))
+
         drawing = self.create_history_chart(period='6mo')
         self.elements.extend([drawing])
 
-        self.elements.append(Paragraph(f"<h3>1 Year</h3>", self.styles["Heading3"]))
         self.elements.append(Spacer(1, 0.1*inch))
+        self.create_titles(('1 Year'))
         drawing = self.create_history_chart(period='1y')
         self.elements.extend([drawing])
 
         self.elements.append(PageBreak())
 
 
+    def create_titles(self, titles):
+        title_style = [('ALIGN', (0, 0), (-1, -1), 'CENTER'), 
+                       ('FONTSIZE', (0, 0), (-1, -1), 14),
+                       ]
+
+        t = Table([titles], colWidths=[3*inch]*len(titles))
+        t.setStyle(TableStyle(title_style))
+        self.elements.append(t)
 
     def create_stock_info_table(self):
 
@@ -228,19 +234,19 @@ class FinanceReportPDF:
         return data
 
 
-    def create_history_chart(self, period='1mo'):
+    def create_history_chart(self, height=100, width=450, x_drawing=500, y_drawing=120, period='1mo'):
         open = self.ticker.history(period=period)['Open'].values
         close = self.ticker.history(period=period)['Close'].values
         data = [open, close]
 
         # Create a container for the chart
-        drawing = Drawing(500, 120)
+        drawing = Drawing(x_drawing, y_drawing)
 
         lc = HorizontalLineChart()
         lc.x = 10
-        lc.y = 50
-        lc.height = 100
-        lc.width = 450
+        lc.y = 10
+        lc.height = height
+        lc.width = width
         lc.data = data
         lc.joinedLines = 1
         # catNames = 'Jan Feb Mar Apr May Jun Jul Aug'.split(' ')

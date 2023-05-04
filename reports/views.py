@@ -116,5 +116,5 @@ class FinanceReportPDFView(APIView):
 
         stock = request.GET.get('stock').upper()
 
-        generate_report.delay(stock)
+        generate_report(stock)
         return Response({'message':'Starting report generation process'})
