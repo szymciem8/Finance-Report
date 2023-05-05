@@ -102,7 +102,7 @@ class FinanceReportPDF:
         style = [('VALIGN',(0,0),(-1,-1),'CENTER'), ('ALIGN', (0, 0), (-1, -1), 'CENTER'),]
         self.elements.append(Paragraph(f"<h2>Stock history</h2>", self.styles["Heading2"]))
 
-        self.create_titles(('1 Month', '3 Months'))
+        self.create_titles(('1M', '3M'))
 
         d1 = self.create_history_chart(period='1mo', width=200, x_drawing=200)
         d2 = self.create_history_chart(period='3mo', width=180, x_drawing=180)
@@ -112,14 +112,14 @@ class FinanceReportPDF:
         t.setStyle(TableStyle(style))
         self.elements.append(t)
 
-        self.elements.append(Spacer(1, 0.1*inch))
-        self.create_titles(('6 Months'))
+        # self.elements.append(Spacer(1, 0.1*inch))
+        self.create_titles(('6M'))
 
         drawing = self.create_history_chart(period='6mo')
         self.elements.extend([drawing])
 
-        self.elements.append(Spacer(1, 0.1*inch))
-        self.create_titles(('1 Year'))
+        # self.elements.append(Spacer(1, 0.1*inch))
+        self.create_titles(('1Y'))
         drawing = self.create_history_chart(period='1y')
         self.elements.extend([drawing])
 
@@ -131,7 +131,7 @@ class FinanceReportPDF:
                        ('FONTSIZE', (0, 0), (-1, -1), 14),
                        ]
 
-        t = Table([titles], colWidths=[3*inch]*len(titles))
+        t = Table([titles], colWidths=[3*inch]*(len(titles)+1))
         t.setStyle(TableStyle(title_style))
         self.elements.append(t)
 
